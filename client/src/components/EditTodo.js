@@ -1,5 +1,7 @@
 import React from 'react';
+import { useDispatch } from 'react-redux'
 import Modal from 'react-modal';
+import { editTodo } from '../redux/actions/todosActions';
 
  
 const customStyles = {
@@ -15,10 +17,12 @@ const customStyles = {
  
 Modal.setAppElement('#root')
  
-function EditTodo({handleEdit,todoId,todoContent}){
+function EditTodo({id, todoContent}){
 
   const [modalIsOpen,setIsOpen] = React.useState(false);
-  const [editedContent,setEditedContent] = React.useState("")
+  const [editedContent,setEditedContent] = React.useState("");
+
+  const dispatch = useDispatch();
   
   function openModal() {
     setIsOpen(true);
@@ -38,7 +42,12 @@ function EditTodo({handleEdit,todoId,todoContent}){
 
   const handleEditSubmit = (e) => {
       e.preventDefault();
-     
+
+      const newTodo = {
+        content: editedContent
+      }
+    
+      dispatch(editTodo(id,newTodo))
     
 
       closeModal()
@@ -61,7 +70,7 @@ function EditTodo({handleEdit,todoId,todoContent}){
           <h5>Change this to do here : </h5>
           <span>{todoContent} :</span>
           <form >
-            <input onChange={handleEditChange} value={editedContent}/>
+            <input onChange={handleEditChange} value={editedContent} style={{color:'black'}}/>
             <div style={{display:'flex',justifyContent: 'space-between'}}>
             <button className="btn waves-effect waves-light btn-small" type="submit" name="action" style={{backgroundColor:'blue'}}  onClick={handleEditSubmit}>Edit</button>
             <button className="btn waves-effect waves-light btn-small" type="submit" name="action" style={{backgroundColor:'orange'}} onClick={closeModal}>close</button>

@@ -15,7 +15,9 @@ mongoose.connect(config.get("mongoURI"),{useNewUrlParser: true ,useUnifiedTopolo
 
 
 // Use routes
-app.use('/api/todos',require('./routes/api/todosRoute'))
+app.use('/api/todos',require('./routes/api/todosRoute'));
+app.use('/api/user',require('./routes/api/user'));
+app.use('/api/auth',require('./routes/api/auth'))
 
 // Listen to the server
 const PORT = process.env.PORT || 5000 ;

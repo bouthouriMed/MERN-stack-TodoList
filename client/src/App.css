@@ -1,10 +1,15 @@
-.App {
-  text-align: center;
+.container {
+  max-width: 1000px;
+  width:100%;
+  margin-top:150px;
+}
+
+title {
+  color:white !important;
+  font-size: large;
 }
 
 .bg-green {
-
-
 text-decoration: line-through;
 }
 
@@ -12,3 +17,48 @@ text-decoration: line-through;
 
 border-radius: 20px;
 }
+
+.remove-btn {
+  margin-right: 1.5rem;
+}
+
+.removeAll-btn {
+  margin-top : 1.5rem;
+  width:100%;
+}
+
+
+.loader-container {
+  position: fixed;
+  top : 50%;
+  left : 50%;
+  background-color: #F8F8F8AD;
+}
+
+.loader {
+  left : 50%;
+  top : 50%;
+  z-index: 1000;
+  position: absolute;
+}
+
+.vertical-center {
+  min-height: 100%;
+  min-height: 100vh;
+
+  display:flex;
+  align-items: center;
+
+  color:white;
+
+}
+
+
+
+
+body {
+  background-image: url("./assets/fabio-oyXis2kALVg-unsplash.jpg");
+  /* background-blend-mode: darken; */
+  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+}
+

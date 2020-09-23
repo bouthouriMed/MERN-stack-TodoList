@@ -1,3 +1,4 @@
 {
-    "mongoURI" : "mongodb+srv://bouthouriMed:123456789Aa@cluster0.swp2z.mongodb.net/todo?retryWrites=true&w=majority"
+    "mongoURI" : "mongodb+srv://bouthouriMed:123456789Aa@cluster0.swp2z.mongodb.net/todo?retryWrites=true&w=majority",
+    "jwtSecret" : "my_jwt_secret"
 }

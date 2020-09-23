@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const auth = require('../../middleware/auth')
 
 // requiring the Todo model
 const Todo = require("../../models/Todos");
@@ -20,10 +21,13 @@ router.get("/", (req, res) => {
 
 router.post("/", (req, res) => {
   const newTodo = new Todo({
-    todo: req.body.todo,
+    content: req.body.content,
   });
 
-  newTodo.save().then((todo) => res.json(todo));
+  newTodo
+    .save()
+    .then((todo) => res.json(todo))
+    .catch((err) => console.log("this is the error : ", err));
 });
 
 // @route  DELETE api/todos/:id
@@ -38,18 +42,49 @@ router.delete("/:id", (req, res) => {
     .catch((err) => console.log("todo not found"));
 });
 
-// @route  UPDATE api/todos/:id
-// @desc   delete a todo
+// @route  PUT api/todos/:id
+// @desc   Edit a todo
 // @access Public
 
 router.put("/:id", (req, res) => {
-  Todo.findById(req.params.id).then((todo) =>
-    todo
-      .overwrite({ todo: req.body.todo })
-      .save()
-      .then((todo) => res.json(todo))
-      .catch(err => console.log(err))
-  );
+  Todo.findByIdAndUpdate(
+    req.params.id,
+    { content: req.body.content },
+    { new: true }
+  )
+    .then((todo) => todo.save().then((todo) => res.json(todo)))
+    .catch((err) => res.status(300).json({ msg: "failed to modify", err }));
 });
 
-module.exports = router;
+// @route  PUT api/todos/todo/:id
+// @desc   finish a todo
+// @access Public
+
+router.put("/todo/:id", (req, res) => {
+
+  Todo.findById(req.params.id, (err,todo) => {
+    if(err) console.log(err);
+    else {
+      todo.isComplete = !todo.isComplete ;
+      todo.save((err,newTodo) => {
+        if(err) console.log(err);
+        else {
+          res.json(newTodo)
+        }
+      })
+    }
+  })
+
+});
+
+// @route  DELETE api/todos
+// @desc   Delete all todos
+// @access Private
+router.delete("/", auth, (req, res) => {
+  Todo.remove({}, (err) => {
+    if (err) throw err;
+  }).then(() => Todo.find().then((todos) => res.json(todos)));
+});
+
+
+module.exports = router;   

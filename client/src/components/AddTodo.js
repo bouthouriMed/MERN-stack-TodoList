@@ -1,40 +1,43 @@
-import React, { useState } from 'react'
-import { useDispatch } from 'react-redux'
-import { addTodo } from '../redux/actions/todosActions'
+import React, { useState } from "react";
+import { useDispatch } from "react-redux";
+import { addTodo } from "../redux/actions/todosActions";
 
 function AddTodo() {
-     
-        const [todo, setTodo] = useState("")
-       const dispatch = useDispatch()
+  const [content, setContent] = useState("");
+  const dispatch = useDispatch();
 
-        const handleChange = (e) => {
-            setTodo(e.target.value)
-        }
+  const handleChange = (e) => {
+    setContent(e.target.value);
+  };
 
-        const handleSubmit = (e) => {
-            e.preventDefault();
+  const handleSubmit = (e) => {
+    e.preventDefault();
 
-            const newTodo = {
-                todo : todo
-            }
-            
-            dispatch(addTodo(newTodo));
-            
-            setTodo("")
-        }
-       
-        
-        return (
-            <div>
+    const newTodo = {
+      content: content,
+      isComplete: false,
+    };
+    console.log(newTodo);
 
-              <form onSubmit={handleSubmit}>
-                  <label> Add to do </label>
-                  <input onChange={handleChange} type="text" placeholder="Add todo here" value={todo}></input>
-              </form>
+    dispatch(addTodo(newTodo));
 
-            </div>
-        )
-    
+    setContent("");
+  };
+
+  return (
+    <div>
+      <form onSubmit={handleSubmit}>
+        <label> Add to do </label>
+        <input
+            style={{color:'white'}}
+          onChange={handleChange}
+          type="text"
+          placeholder="Add todo here"
+          value={content}
+        ></input>
+      </form>
+    </div>
+  );
 }
 
-export default AddTodo
+export default AddTodo;

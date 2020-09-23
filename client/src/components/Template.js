@@ -1,26 +1,38 @@
 import React, { useEffect } from "react";
 import { connect, useDispatch, useSelector } from "react-redux";
-import { getTodos, deleteTodo } from "../redux/actions/todosActions";
+import { Button } from "reactstrap";
+import {
+  getTodos,
+  deleteTodo,
+  finishTodo,
+} from "../redux/actions/todosActions";
 import EditTodo from "./EditTodo";
 
 function Template() {
   const dispatch = useDispatch();
   const todos = useSelector((state) => state.todo.todos);
-
+  console.log(todos);
 
   useEffect(() => {
     dispatch(getTodos());
+    console.log(todos);
   }, []);
+
+ 
 
   const todoList = todos ? (
     todos.map((todo) => {
       return (
-        <div className="collection-item" key={todo._id}>
+        <div
+          className="collection-item"
+          key={todo._id}
+          style={todo.isComplete ? { backgroundColor: "lightGreen" } : null}
+        >
           <span
             className="mySpan"
             style={{ display: "flex", justifyContent: "space-between" }}
           >
-            {todo.todo}
+            {todo.content}
             <div
               style={{
                 display: "flex",
@@ -28,18 +40,19 @@ function Template() {
                 width: "25%",
               }}
             >
-              <EditTodo/>
-              <button
+              <EditTodo id={todo._id} todoContent={todo.content} />
+              <Button
                 onClick={() => dispatch(deleteTodo(todo._id))}
                 className="btn waves-effect waves-light btn-small"
                 type="submit"
                 name="action"
               >
                 Del
-              </button>
-              {/* <button
-                onClick={() => handleDone(todo.id)}
-                className="btn waves-effect waves-light btn-small done"
+              </Button>
+
+              <Button
+                onClick={() => dispatch(finishTodo(todo._id))}
+                className="btn waves-effect waves-light btn-small "
                 type="submit"
                 name="action"
                 style={
@@ -49,7 +62,7 @@ function Template() {
                 }
               >
                 {todo.isComplete ? "Undo" : "Done"}
-              </button> */}
+              </Button>
             </div>
           </span>
         </div>
@@ -59,7 +72,11 @@ function Template() {
     <p className="center"> You have no todo's left </p>
   );
 
-  return <div className="todos collection">{todoList}</div>;
+  return (
+    <div className="todos collection" style={{ borderRadius: "3px" }}>
+      {todoList}
+    </div>
+  );
 }
 
-export default connect(null, { getTodos, deleteTodo })(Template);
+export default connect(null, { getTodos, deleteTodo, finishTodo })(Template);

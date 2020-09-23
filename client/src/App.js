@@ -1,63 +1,40 @@
 import React, { Component } from "react";
-import Template from "./components/Template";
-import AddTodo from "./components/AddTodo";
+import { BrowserRouter, Redirect, Route, Switch } from "react-router-dom";
+import Login from "./components/auth/Login";
+import Signin from "./components/auth/Signin";
+import { connect } from "react-redux";
+
+
 import "./App.css";
+import Home from "./components/Home";
+import PrivateRoute from "../src/components/PrivateRoute";
+import { loadUser } from "./redux/actions/authActions";
 
 class App extends Component {
-  // deleteTodo = (id) => {
-  //   let todosF = this.state.todos.filter( todo => {
-  //     return todo.id !== id ;
-  //   })
-
-  //   this.setState({
-  //     todos : todosF
-  //   })
-  // }
-
-  // addTodo = (todo) => {
-  //   const newTodo = {
-  //     content : todo , id : Math.random()
-  //   }
-  //   let todosA = [...this.state.todos,newTodo] ;
-  //   this.setState({
-  //     todos : todosA
-  //   })
-  // }
-
-  // handleEdit = (edit,id) => {
-
-  //   const todosE = this.state.todos.map(todo=>
-  //     (todo.id===id) ? (
-  //       {...todo,content:edit}
-  //     ) : (todo)
-  //   )
-  //  this.setState({
-  //    todos : todosE
-  //  })
-  // console.log(todosE)
-
-  // }
-
-  // handleDone=(id)=>{
-  //   const todosD = this.state.todos.map(todo=>
-  //     (todo.id===id) ? (
-  //       {...todo,isComplete:!todo.isComplete}
-  //     ) : (todo)
-  //   )
-  //  this.setState({
-  //    todos : todosD
-  //  })
-  // }
+  componentDidMount() {
+    this.props.loadUser();
+  }
 
   render() {
     return (
-      <div className="container">
-        <h1 className="center blue-text"> My todo list </h1>
-        <Template/>
-        <AddTodo />
-      </div>
+      <BrowserRouter>
+        <div className="container">
+          <Switch>
+            <PrivateRoute exact path="/" component={Home} />
+            <Route path="/signin" component={Signin} />
+            <Route path="/login" component={Login} />
+          </Switch>
+        </div>
+      </BrowserRouter>
     );
   }
 }
 
-export default App;
+const mapStateToProps = (state) => {
+  return {
+    user: state.auth.user,
+    isAuthenticated: state.auth.isAuthenticated,
+  };
+};
+
+export default connect(mapStateToProps, { loadUser })(App);
